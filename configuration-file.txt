@@ -5,6 +5,53 @@
 3. Run "docker compose up -d"
 If error occurred empty data folder and rerun the mentioned command  above.
 
+############# how fluentd process logs to elasticsearch ############
+
+1. Fluentd is a log collector. it collects logs from volume, store to elasticsearch
+####### working process ###########
+1. Applications logs store in a shared volume
+         1. docker volume ls   (check volume names)
+         2. docker inspect container ( check the "mount" object to check volume is properly mounted or created)
+
+               "Mounts": [
+                   {
+                       "Type": "volume",
+                       "Name": "es-data",
+                       "Source": "/var/lib/docker/volumes/es-data/_data",
+                       "Destination": "/usr/share/elasticsearch/data",
+                       "Driver": "local",
+                       "Mode": "",
+                       "RW": true,
+                       "Propagation": ""
+                   }
+               ]
+         3. docker volume inspect "volume_name" output will be like -
+                 [
+                   {
+                     "CreatedAt": "2024-12-25T10:45:00Z",
+                     "Driver": "local",
+                     "Labels": {},
+                     "Mountpoint": "/var/lib/docker/volumes/my_volume/_data",
+                     "Name": "my_volume",
+                     "Options": {},
+                     "Scope": "local"
+                   }
+                 ]
+        4. cd /var/lib/docker/volumes/my_volume/_data (access volume data on host)
+        5. docker volume rm "volume_name" (remove docker volume)
+        6. docker volume prune ( remove unused volume -> volumes that are not associated with any container)
+
+2. Prepare the fluent.conf file so that it can read logs from container
+3. Use writable folder to pos of logs like -> tmp
+4. Check docker volume has proper permission or not ?
+5. Check fluent-plugin-elasticsearch plugin compatible with elasticsearch
+
+############## Check point if fluentd cant not capture logs properly or not store logs in elasticsearch ###########
+
+2. Prepare the fluent.conf file so that it can read logs from container
+3. Use writable folder to pos of logs like -> tmp
+4. Check docker volume has proper permission or not ?
+5. Check fluent-plugin-elasticsearch plugin compatible with elasticsearch
 
 
 ## Elasticsearch crud curls:
