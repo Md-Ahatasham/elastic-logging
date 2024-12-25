@@ -15,6 +15,7 @@ services:
         hard: -1
     volumes:
       - ./data:/usr/share/elasticsearch/data
+      - elastic-data:/usr/share/elasticsearch/data
     networks:
       - laravel
     ports:
@@ -50,9 +51,11 @@ services:
       - ENVIRONMENT=local
 networks:
   laravel:
-    external: true
+    external: true # don't create network use existing one
 
 volumes:
-  laravel_logs: # Declare the named volume here
+  laravel_logs: # Declare the named volume here to use the actual volume name rather than auto volume name with prefix
     name: laravel_logs
-    external: true
+    external: true  # don't create volume use existing one
+  elastic-data: # Declare the named volume here
+    name: elastic-data
