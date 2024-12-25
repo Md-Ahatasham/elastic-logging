@@ -1,0 +1,94 @@
+## Elasticsearch crud curls:
+
+1. Create index in elasticsearch
+
+    # POST request to create a document
+
+    curl -X POST "localhost:9200/my_index/_doc/1" -H 'Content-Type: application/json' -d'
+    {
+      "title": "Elasticsearch Introduction",
+      "content": "This is an example document in Elasticsearch."
+    }
+
+2. Retrieve specific document from elasticsearch
+
+   # GET request to retrieve a document by ID
+   curl -X GET "localhost:9200/my_index/_doc/1"
+
+3. Update document in elasticsearch
+
+   # POST request to update a document
+   curl -X POST "localhost:9200/my_index/_doc/1/_update" -H 'Content-Type: application/json' -d'
+   {
+     "doc": {
+       "title": "Updated Elasticsearch Introduction"
+     }
+   }
+
+4. Delete specific document from index in elasticsearch
+
+   # DELETE request to remove a document by ID
+   curl -X DELETE "localhost:9200/my_index/_doc/1"
+
+5. Get specific index from elasticsearch
+
+    curl -X GET "localhost:9200/my_index"
+
+6. Delete specific index from elasticsearch
+
+   # DELETE request to remove index
+   curl -X DELETE "localhost:9200/my_index"
+
+7. Search document within index by content
+
+    ## This will search for documents that contain the word "Elasticsearch" in the content field.
+
+    curl -X GET "localhost:9200/my_index/_search" -H 'Content-Type: application/json' -d'
+    {
+      "query": {
+        "match": {
+          "content": "Elasticsearch"
+        }
+      }
+    }
+
+8. Create index with bulk document
+
+    curl -X POST "localhost:9200/my_index/_bulk" -H 'Content-Type: application/json' -d'
+    { "index": { "_id": 1 } }
+    { "title": "Document 1", "content": "This is the first document." }
+    { "index": { "_id": 2 } }
+    { "title": "Document 2", "content": "This is the second document." }
+
+9. Delete by query from elasticsearch
+
+    ## This will delete all documents in my_index that contain the word "Elasticsearch" in the content field.
+
+    curl -X POST "localhost:9200/my_index/_delete_by_query" -H 'Content-Type: application/json' -d'
+    {
+      "query": {
+        "match": {
+          "content": "Elasticsearch"
+        }
+      }
+    }
+
+10. List all indexes from elasticsearch
+    curl -X GET "localhost:9200/_cat/indices?v"
+
+11. Health check api in elasticsearch
+    curl -X GET "localhost:9200/_cluster/health?pretty"
+
+
+### Recovery process #####
+
+12. Check nodes status, usages, available space, total space
+     ### status -> yellow/red means critical condition, green means safe zone ###
+
+    curl --location 'http://localhost:9200/_cat/nodes?v=null&h=ip%2Cname%2Cdisk.used%2Cdisk.avail%2Cdisk.total%2Cdisk.percent'
+
+13. Check all index status  usages, free space, available & total space
+
+    curl --location 'http://localhost:9200/_cat/indices?v=null&s=store.size%3Adesc'
+
+ 14. will add more.........
