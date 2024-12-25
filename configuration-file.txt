@@ -1,3 +1,12 @@
+######### To run this project what you need to do ########
+
+1. Clone the repository
+2. Run "docker compose build"
+3. Run "docker compose up -d"
+If error occurred empty data folder and rerun the mentioned command  above.
+
+
+
 ## Elasticsearch crud curls:
 
 1. Create index in elasticsearch
@@ -91,4 +100,26 @@
 
     curl --location 'http://localhost:9200/_cat/indices?v=null&s=store.size%3Adesc'
 
- 14. will add more.........
+ 14. Using ILM ( Index lifecycle management) delete logs for certain time period
+     ### This ILM policy creates new indices every 7 days or when the index reaches 50 GB, and deletes indices older than 30 days.
+
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_age": "7d",
+                "max_size": "50gb"
+              }
+            }
+          },
+          "delete": {
+            "min_age": "30d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
