@@ -42,6 +42,7 @@ services:
       - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
 #      - /var/lib/docker/containers:/var/lib/docker/containers:ro # Mount Docker logs directory
       - laravel_logs:/var/log/laravel
+      - fluentd-buffer:/var/log/fluentd-buffers  # Persistent buffer
     networks:
       - laravel
     ports:
@@ -59,3 +60,5 @@ volumes:
     external: true  # don't create volume use existing one
   elastic-data: # Declare the named volume here
     name: elastic-data
+  fluentd-buffer:
+    name: fluentd-buffer:
